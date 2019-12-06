@@ -37,7 +37,7 @@ export class CatapultUseCaseImpl implements CatapultUseCase {
     try {
       const sendMosaicDTO: SendMosaicDTO = {
         fromPrivateKey: process.env.FAUCET_PRIVATE_KEY,
-        toAddress: dto.toAddress,
+        toAddress: dto.address,
         amount: dto.amount,
       }
       return this.transactionRepository.transferTransaction(sendMosaicDTO)

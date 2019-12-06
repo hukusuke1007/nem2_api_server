@@ -1,2 +1,9 @@
-# nem2_api_server
- nem2_api_server
+# Firebase Cloud Functions Catapult API
+
+[Documents on japanese]()
+
+## Functions
+- wallet
+- faucet
+- sendMosaic
+- ~~sendMosaicNoFee~~

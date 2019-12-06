@@ -7,7 +7,7 @@ curl -w '\n' -X POST $API/faucet \
   -H "Content-Type: application/json" \
   -d '
 {
-  "toAddress": "SCGNCYA2FSBSYI36KC2ZCE6ILPDFOUU6XCUFJMA4",
+  "address": "SCGNCYA2FSBSYI36KC2ZCE6ILPDFOUU6XCUFJMA4",
   "amount": 20
 }
 '
