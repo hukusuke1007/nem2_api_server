@@ -101,9 +101,9 @@ export class ListenerHelper {
           }, (e) => reject(e))
       
         this.listener
-          .unconfirmedAdded(adminAddress)
-          .subscribe(res => {
-            console.log('⏳: Transaction status changed to unconfirmed adminAddress')
+          .confirmed(adminAddress)
+          .subscribe(transaction => {
+            console.log('⏳: Transaction confirmed adminAddress' , transaction.transactionInfo.hash)
           }, e => reject(e))
 
         this.listener

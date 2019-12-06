@@ -75,7 +75,7 @@ export class AggregateTransactionDataSource {
         deadline,
         [
           adminTransferTransaction.toAggregate(adminPublicAccount), // 手数料分のTx
-          sendTransferTransaction.toAggregate(fromPublicAccount),       // ユーザのメッセージ送信Tc
+          sendTransferTransaction.toAggregate(fromPublicAccount),   // ユーザAからBヘの送金Tx
         ],
         this.node.network
       )

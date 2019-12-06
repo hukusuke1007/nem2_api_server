@@ -47,7 +47,7 @@ export class SampleUseCaseImpl implements SampleUseCase {
       const dto: SendMosaicDTO = {
         fromPrivateKey: process.env.USER_A_PRIVATE_KEY,
         toAddress: process.env.USER_B_ADDRESS,
-        amount: 50,
+        amount: 2,
       }
       const repository = new AggregateTransactionDataSource()
       return repository.transferTransactionWithNoFee(dto)
