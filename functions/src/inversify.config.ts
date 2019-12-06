@@ -1,18 +1,21 @@
 import 'reflect-metadata'
 import { Container } from 'inversify'
-import { SampleUseCase, SampleUseCaseImpl } from './domain/use_case/SampleUseCase'
+import { CatapultUseCase, CatapultUseCaseImpl } from './domain/use_case/CatapultUseCase'
 import { WalletRepository } from './domain/repository/WalletRepository'
-import { AggregateTransactionRepository } from './domain/repository/AggregateTransactionRepository'
 import { TransactionRepository } from './domain/repository/TransactionRepository'
+import { AggregateTransactionRepository } from './domain/repository/AggregateTransactionRepository'
 import { WalletDatasource } from './infrastructure/WalletDatasource'
-import { AggregateTransactionDataSource } from './infrastructure/AggregateTransactionDataSource'
 import { TransactionDataSource } from './infrastructure/TransactionDataSource'
+import { AggregateTransactionDataSource } from './infrastructure/AggregateTransactionDataSource'
 
 const container = new Container()
 
+// Repository
 container.bind<WalletRepository>('WalletRepository').to(WalletDatasource)
-container.bind<AggregateTransactionRepository>('AggregateTransactionRepository').to(AggregateTransactionDataSource)
 container.bind<TransactionRepository>('TransactionRepository').to(TransactionDataSource)
-container.bind<SampleUseCase>('SampleUseCase').to(SampleUseCaseImpl)
+container.bind<AggregateTransactionRepository>('AggregateTransactionRepository').to(AggregateTransactionDataSource)
+
+// UseCase
+container.bind<CatapultUseCase>('CatapultUseCase').to(CatapultUseCaseImpl)
 
 export default container
