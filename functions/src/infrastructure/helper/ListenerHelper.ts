@@ -83,44 +83,87 @@ export class ListenerHelper {
     })
   }
 
-  async aggregateLoadStatus(
-    adminAddress: Address,
-    fromAddress: Address,
-    hash: string,
-    lockFund: (transaction: Transaction) => void, 
-    aggregateBondedAdded: (transaction: AggregateTransaction) => void,
-  ): Promise<TransactionResult> {
-    console.log(adminAddress.plain(), '=>', fromAddress.plain())
+  async confirmed(
+    address: Address,
+  ): Promise<Transaction> {
     return new Promise((resolve, reject) => {
       this.listener.open().then(() => {
         this.listener
-          .confirmed(adminAddress)
-          .subscribe((result) => {
-            console.log('LockFund confirmed', result.type, result.transactionInfo.hash)
-            lockFund(result)
-          }, (e) => reject(e))
-      
-        this.listener
-          .confirmed(adminAddress)
-          .subscribe(transaction => {
-            console.log('⏳: Transaction confirmed adminAddress' , transaction.transactionInfo.hash)
-          }, e => reject(e))
-
-        this.listener
-          .aggregateBondedAdded(fromAddress)
+          .aggregateBondedAdded(address)
           .subscribe((transaction) => {
             console.log('✅: aggregateBondedAdded')
-            aggregateBondedAdded(transaction)
           }, (e) => reject(e))
-        
+
         this.listener
-          .confirmed(fromAddress)
+          .confirmed(address)
+          .subscribe((res) => {
+            resolve(res)
+            // this.listener.close()
+          }, (e) => reject(e))
+
+      }).catch(e => reject(e))
+    })
+  }
+
+  async aggregateBondedAddedConfirmed(
+    address: Address,
+    hash: string,
+    callback: (transaction: AggregateTransaction) => void, 
+  ): Promise<TransactionResult> {
+    return new Promise((resolve, reject) => {
+      this.listener.open().then(() => {
+        this.listener
+          .aggregateBondedAdded(address)
+          .subscribe((transaction) => {
+            console.log('✅: aggregateBondedAdded')
+            callback(transaction)
+          }, (e) => reject(e))
+
+        this.listener
+          .confirmed(address)
           .subscribe(res => {
             console.log('✅: Transaction confirmed')
             resolve(new TransactionResult(hash, res.isConfirmed(), res))
             this.listener.close()
           }, (e) => reject(e))
-        }).catch(e => reject(e))
+      }).catch(e => reject(e))
     })
   }
+
+  // async aggregateLoadStatus(
+  //   adminAddress: Address,
+  //   fromAddress: Address,
+  //   hash: string,
+  //   lockFund: (transaction: Transaction) => void, 
+  //   aggregateBondedAdded: (transaction: AggregateTransaction) => void,
+  // ): Promise<TransactionResult> {
+  //   console.log(adminAddress.plain(), '=>', fromAddress.plain())
+  //   return new Promise((resolve, reject) => {
+  //     this.listener.open().then(() => {
+    
+  //       this.listener
+  //         .confirmed(adminAddress)
+  //         .subscribe((result) => {
+  //           console.log('LockFund confirmed', result.type, result.transactionInfo.hash)
+  //           lockFund(result)
+  //         }, (e) => reject(e))
+
+  //       this.listener
+  //         .confirmed(fromAddress)
+  //         .subscribe(res => {
+  //           console.log('✅: Transaction confirmed')
+  //           resolve(new TransactionResult(hash, res.isConfirmed(), res))
+  //           this.listener.close()
+  //         }, (e) => reject(e))
+
+  //       this.listener
+  //         .aggregateBondedAdded(fromAddress)
+  //         .subscribe((transaction) => {
+  //           console.log('✅: aggregateBondedAdded')
+  //           aggregateBondedAdded(transaction)
+  //         }, (e) => reject(e))
+      
+  //     }).catch(e => reject(e))
+  //   })
+  // }
 }

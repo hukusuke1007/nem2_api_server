@@ -17,8 +17,11 @@ import { BlockchainResult, ResultMessage } from '../domain/type/Types'
 import { BlockchainConfigType, blockchainConfig } from '../common/Config'
 import { SendMosaicDTO } from '../domain/dto/SendMosaicDTO'
 import { ChronoUnit } from 'js-joda'
+import { TransactionRepository } from '../domain/repository/TransactionRepository'
+import { injectable } from 'inversify'
 
-export class TransactionDataSource {
+@injectable()
+export class TransactionDataSource implements  TransactionRepository {
   private node: BlockchainConfigType
   private transactionHttp: TransactionHttp
 

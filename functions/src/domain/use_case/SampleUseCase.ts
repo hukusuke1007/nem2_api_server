@@ -1,6 +1,8 @@
 import { AggregateTransactionDataSource } from '../../infrastructure/AggregateTransactionDataSource'
 import { TransactionDataSource } from '../../infrastructure/TransactionDataSource'
 import { WalletRepository } from '../repository/WalletRepository'
+import { AggregateTransactionRepository } from '../repository/AggregateTransactionRepository'
+import { TransactionRepository } from '../repository/TransactionRepository'
 import { SendMosaicDTO } from '../dto/SendMosaicDTO'
 import { injectable, inject } from 'inversify'
 import { BlockchainAccount, BlockchainResult } from '../type/Types'
@@ -15,11 +17,17 @@ export interface SampleUseCase {
 export class SampleUseCaseImpl implements SampleUseCase {
 
   private walletRepository: WalletRepository
+  private aggregateTransactionRepository: AggregateTransactionRepository
+  private transactionRepository: TransactionRepository
 
   constructor(
-    @inject('WalletRepository') walletRepository: WalletRepository
+    @inject('WalletRepository') walletRepository: WalletRepository,
+    @inject('AggregateTransactionRepository') aggregateTransactionRepository: AggregateTransactionRepository,
+    @inject('TransactionRepository') transactionRepository: TransactionRepository,
   ) {
     this.walletRepository = walletRepository
+    this.aggregateTransactionRepository = aggregateTransactionRepository
+    this.transactionRepository = transactionRepository
   }
 
   createWallet(): BlockchainAccount {
@@ -33,8 +41,7 @@ export class SampleUseCaseImpl implements SampleUseCase {
         toAddress: process.env.USER_A_ADDRESS,
         amount: 10,
       }
-      const repository = new TransactionDataSource()
-      const result = await repository.transferTransaction(dto)
+      const result = await this.transactionRepository.transferTransaction(dto)
       console.log('distributionMosaic', result)
       return result
     } catch (e) {
@@ -49,8 +56,9 @@ export class SampleUseCaseImpl implements SampleUseCase {
         toAddress: process.env.USER_B_ADDRESS,
         amount: 2,
       }
-      const repository = new AggregateTransactionDataSource()
-      return repository.transferTransactionWithNoFee(dto)
+      const result = await this.aggregateTransactionRepository.transferTransactionWithNoFee(dto)
+      console.log('sendMosaicNoFee', result)
+      return result
     } catch (e) {
       throw e
     } 
