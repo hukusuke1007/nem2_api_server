@@ -15,7 +15,10 @@ NODE_PORT = '3001'
 # curl https://XXXXX:3001/block/1
 # is meta.generationHash
 NODE_GENERATION_HASH = ''
+FAUCET_PRIVATE_KEY = ''
+
 ADMIN_PRIVATE_KEY = ''
+ADMIN_PUBLIC_KEY = ''
 ADMIN_ADDRESS = ''
 
 USER_A_PRIVATE_KEY = ''

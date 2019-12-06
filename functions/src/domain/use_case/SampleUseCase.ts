@@ -37,7 +37,7 @@ export class SampleUseCaseImpl implements SampleUseCase {
   async distributionMosaic(): Promise<BlockchainResult> {
     try {
       const dto: SendMosaicDTO = {
-        fromPrivateKey: process.env.ADMIN_PRIVATE_KEY,
+        fromPrivateKey: process.env.FAUCET_PRIVATE_KEY,
         toAddress: process.env.USER_A_ADDRESS,
         amount: 10,
       }
